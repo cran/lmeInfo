@@ -161,6 +161,9 @@ test_that("dR_dcorStruct.corCAR1 returns the same result as dR_dcorStruct.corAR1
 })
 
 test_that("lmeinfo::g_mlm returns the same result as scdhlm::g_REML.", {
+
+  skip_if_not_installed("scdhlm", minimum_version = "0.4.2")
+
   check_against_scdhlm(Laski_AR1,
                        p_lmeInfo = c(0,1), r_lmeInfo = c(1,0,0,0,1),
                        p_scdhlm = c(0,1), r_scdhlm = c(1,0,1,0,0))
@@ -168,6 +171,9 @@ test_that("lmeinfo::g_mlm returns the same result as scdhlm::g_REML.", {
 
 
 test_that("Results do not depend on order of data.", {
+
+  skip_on_cran()
+
   test_after_shuffling(Laski_iid, seed = 20)
   test_after_shuffling(Laski_het, seed = 17) # 20
   test_after_shuffling(Laski_AR1, seed = 20)
@@ -181,6 +187,23 @@ test_that("Results do not depend on order of data.", {
   test_after_shuffling(Schutte_RML4, seed = 20)
 })
 
+
+test_that("Info matrices work with dropped observations.", {
+
+  skip_on_cran()
+
+  test_after_deleting(Laski_iid)
+  test_after_deleting(Laski_het)
+  test_after_deleting(Laski_AR1)
+  test_after_deleting(Laski_hetAR1)
+  test_after_deleting(Laski_CAR1)
+  test_after_deleting(Laski_MA1)
+  test_after_deleting(Lambert_RML)
+  test_after_deleting(Anglesea_RML)
+  test_after_deleting(Saddler_quality_RML)
+  test_after_deleting(Schutte_RML3)
+  test_after_deleting(Schutte_RML4)
+})
 
 test_that("New REML calculations work.", {
 

@@ -133,6 +133,11 @@ Q_matrix <- function(mod) {
 #' @importFrom stats dist
 #' @importFrom stats model.matrix
 #' @importFrom stats vcov
+#' @importFrom stats complete.cases
+#' @importFrom stats formula
+#' @importFrom stats na.action
+#' @importFrom stats rbinom
+#' @importFrom stats terms
 #'
 
 Fisher_info <- function(mod, type = "expected") {
@@ -155,6 +160,18 @@ Fisher_info <- function(mod, type = "expected") {
 
   est_method <- mod$method
 
+  # For REML, need X and M matrices
+  if (est_method == "REML") {
+    X <- model.matrix(mod, data = nlme::getData(mod))
+
+    # check for columns dropped from model
+    col_names <- names(if (inherits(mod, "gls")) coef(mod) else nlme::fixef(mod))
+    if (ncol(X) != length(col_names)) X <- X[,col_names,drop=FALSE]
+
+    Vinv_X <- prod_blockmatrix(V_inv, X, block = attr(V_inv, "groups"))
+    M <- chol2inv(chol(t(X) %*% Vinv_X))
+  }
+
   if (type == "expected") {
 
     if (est_method == "ML") {
@@ -169,9 +186,6 @@ Fisher_info <- function(mod, type = "expected") {
 
     } else if (est_method == "REML") {
 
-      X <- model.matrix(mod, data = nlme::getData(mod))
-      Vinv_X <- prod_blockmatrix(V_inv, X, block = attr(V_inv, "groups"))
-      M <- chol2inv(chol(t(X) %*% Vinv_X))
       Vinv_X_M <- Vinv_X %*% M
 
       # create lists with Xt v^-1 dV entries
@@ -212,6 +226,8 @@ Fisher_info <- function(mod, type = "expected") {
   } else if (type == "average") {
 
     rhat <- as.matrix(stats::residuals(mod, level = 0)) # fixed residuals
+    if (inherits(na.action(mod), "exclude")) rhat <- rhat[-as.integer(na.action(mod)),,drop=FALSE]
+
     Vinv_rhat <- prod_blockmatrix(A = V_inv, B = rhat)
 
     dVr <- sapply(dV_list, prod_blockmatrix, B = Vinv_rhat, simplify = TRUE) # dV*Vinv*rhat (N * r matrix)
@@ -221,10 +237,6 @@ Fisher_info <- function(mod, type = "expected") {
       info <- (t(dVr) %*% prod_blockmatrix(V_inv, dVr)) / 2
 
     } else if (est_method == "REML") {
-
-      X <- model.matrix(mod, data = nlme::getData(mod))
-      Vinv_X <- prod_blockmatrix(V_inv, X, block = attr(V_inv, "groups"))
-      M <- chol2inv(chol(t(X) %*% Vinv_X))
 
       Xt_Vinv_dV_Vinv_rhat <- t(Vinv_X) %*% dVr
 

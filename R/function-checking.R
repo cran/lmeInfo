@@ -136,12 +136,74 @@ test_with_FIML <- function(mod) {
 
 }
 
+compare_omit_exclude_complete <- function(mod, dat, NA_vals) {
+
+  dat_complete <- dat[!NA_vals,,drop=FALSE]
+
+  mod_omit <- suppressWarnings(stats::update(mod, data = dat, na.action = "na.omit"))
+  mod_exclude <- suppressWarnings(stats::update(mod, data = dat, na.action = "na.exclude"))
+  mod_comp <- suppressWarnings(stats::update(mod, data = dat_complete))
+  mod_comp$data <- dat_complete
+
+  varcomp_omit <- extract_varcomp(mod_omit)
+  varcomp_exclude <- extract_varcomp(mod_exclude)
+  varcomp_comp <- extract_varcomp(mod_comp)
+  testthat::expect_identical(varcomp_omit, varcomp_comp)
+  testthat::expect_identical(varcomp_exclude, varcomp_comp)
+
+  EI_omit <- Fisher_info(mod_omit, type = "expected")
+  EI_exclude <- Fisher_info(mod_exclude, type = "expected")
+  EI_comp <- Fisher_info(mod_comp, type = "expected")
+  AI_omit <- Fisher_info(mod_omit, type = "average")
+  AI_exclude <- Fisher_info(mod_exclude, type = "average")
+  AI_comp <- Fisher_info(mod_comp, type = "average")
+
+  testthat::expect_equal(EI_omit, EI_comp)
+  testthat::expect_equal(EI_exclude, EI_comp)
+  testthat::expect_equal(AI_omit, AI_comp)
+  testthat::expect_equal(AI_exclude, AI_comp)
+
+}
+
+
+test_after_deleting <- function(mod, seed = NULL) {
+
+  if (!is.null(seed)) set.seed(seed)
+
+  # NA values in response
+
+  dat <- nlme::getData(mod)
+  y_var <- as.character(formula(mod)[[2]])
+
+  NA_vals <- as.logical(rbinom(nrow(dat), size = 1, prob = 0.2))
+  dat[[y_var]][NA_vals] <- NA
+
+  if (inherits(mod, "gls")) dat <<- dat
+  compare_omit_exclude_complete(mod, dat, NA_vals)
+
+
+
+  # NA values in predictors too
+
+  x_vars <- attr(terms(formula(mod)), "term.labels")
+  x_vars <- unlist(lapply(x_vars, function(x) strsplit(x, ":")))
+  x_vars <- unique(x_vars)
+  NA_all <- NA_vals
+
+  for (x in x_vars) {
+    NA_vals <- as.logical(rbinom(nrow(dat), size = 1, prob = 0.2 / length(x_vars)))
+    dat[[x]][NA_vals] <- NA
+    NA_all <- NA_all | NA_vals
+  }
+
+  if (inherits(mod, "gls")) dat <<- dat
+  compare_omit_exclude_complete(mod, dat, NA_all)
+
+}
 
 test_after_shuffling <- function(mod, by_var = NULL,
                                  tol_param = 10^-3, tol_info = 10^-3,
-                                 test = "info", seed = NULL, CRAN_skip = TRUE) {
-
-  if (CRAN_skip) testthat::skip_on_cran()
+                                 test = "info", seed = NULL) {
 
   if (!is.null(seed)) set.seed(seed)
 
@@ -268,15 +330,15 @@ check_against_scdhlm <- function(mod, p_lmeInfo, r_lmeInfo, p_scdhlm = p_lmeInfo
 
   g_lmeInfo <- g_mlm(mod, p_lmeInfo, r_lmeInfo)
 
-  g_scdhlm <- scdhlm::g_REML(mod, p_scdhlm, r_scdhlm)
+  g_scdhlm <- suppressWarnings(scdhlm::g_REML(mod, p_scdhlm, r_scdhlm))
 
   testthat::expect_equal(g_lmeInfo$p_beta, g_scdhlm$p_beta) # numerator of effect size
   testthat::expect_equal(g_lmeInfo$r_beta, g_scdhlm$r_beta) # squared denominator of effect size
   testthat::expect_equal(g_lmeInfo$delta_AB, g_scdhlm$delta_AB) # unadjusted (REML) effect size estimate
-  testthat::expect_equal(g_lmeInfo$nu, g_scdhlm$nu) # degrees of freedom
-  testthat::expect_equal(g_lmeInfo$kappa, g_scdhlm$kappa) # constant kappa
-  testthat::expect_equal(g_lmeInfo$g_AB, g_scdhlm$g_AB) # corrected effect size estimate
-  testthat::expect_equal(g_lmeInfo$SE_g_AB^2, g_scdhlm$V_g_AB) # Approximate variance estimate
+  testthat::expect_equivalent(g_lmeInfo$nu, g_scdhlm$nu) # degrees of freedom
+  testthat::expect_equivalent(g_lmeInfo$kappa, g_scdhlm$kappa) # constant kappa
+  testthat::expect_equivalent(g_lmeInfo$g_AB, g_scdhlm$g_AB) # corrected effect size estimate
+  testthat::expect_equivalent(g_lmeInfo$SE_g_AB^2, g_scdhlm$V_g_AB) # Approximate variance estimate
   testthat::expect_equal(g_lmeInfo$theta$sigma_sq, g_scdhlm$sigma_sq) # Estimated level-1 variance
   testthat::expect_equal(g_lmeInfo$theta$cor_params, g_scdhlm$phi) # Estimated autocorrelation
   testthat::expect_equal(g_lmeInfo$theta$Tau$case, g_scdhlm$Tau) # Vector of level-2 variance components
