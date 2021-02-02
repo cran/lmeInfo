@@ -11,65 +11,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2020-11-12" />
+<meta name="date" content="2021-02-01" />
 
 <title>Information matrices for fitted lme() and gls() models</title>
 
-<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
-// v0.0.1
-// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
-
-document.addEventListener('DOMContentLoaded', function() {
-  const codeList = document.getElementsByClassName("sourceCode");
-  for (var i = 0; i < codeList.length; i++) {
-    var linkList = codeList[i].getElementsByTagName('a');
-    for (var j = 0; j < linkList.length; j++) {
-      if (linkList[j].innerHTML === "") {
-        linkList[j].setAttribute('aria-hidden', 'true');
-      }
-    }
-  }
-});
-</script>
-<style type="text/css">
-a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
-a.anchor-section::before {content: '#';}
-.hasAnchor:hover a.anchor-section {visibility: visible;}
-</style>
-<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
-document.addEventListener('DOMContentLoaded', function() {
-  // Do nothing if AnchorJS is used
-  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
-    return;
-  }
-
-  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-
-  // Do nothing if sections are already anchored
-  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
-    return null;
-  }
-
-  // Use section id when pandoc runs with --section-divs
-  const section_id = function(x) {
-    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
-            ? x.id : '');
-  };
-
-  // Add anchors
-  h.forEach(function(x) {
-    const id = x.id || section_id(x.parentElement);
-    if (id === '') {
-      return null;
-    }
-    let anchor = document.createElement('a');
-    anchor.href = '#' + id;
-    anchor.classList = ['anchor-section'];
-    x.classList.add('hasAnchor');
-    x.appendChild(anchor);
-  });
-});
-</script>
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+<link href="data:text/css,%0Aa%2Eanchor%2Dsection%20%7Bmargin%2Dleft%3A%2010px%3B%20visibility%3A%20hidden%3B%20color%3A%20inherit%3B%7D%0Aa%2Eanchor%2Dsection%3A%3Abefore%20%7Bcontent%3A%20%27%23%27%3B%7D%0A%2EhasAnchor%3Ahover%20a%2Eanchor%2Dsection%20%7Bvisibility%3A%20visible%3B%7D%0A" rel="stylesheet" />
+<script src="data:application/javascript;base64,Ly8gQW5jaG9yIHNlY3Rpb25zIHYxLjAgd3JpdHRlbiBieSBBdHN1c2hpIFlhc3Vtb3RvIG9uIE9jdCAzcmQsIDIwMjAuCmRvY3VtZW50LmFkZEV2ZW50TGlzdGVuZXIoJ0RPTUNvbnRlbnRMb2FkZWQnLCBmdW5jdGlvbigpIHsKICAvLyBEbyBub3RoaW5nIGlmIEFuY2hvckpTIGlzIHVzZWQKICBpZiAodHlwZW9mIHdpbmRvdy5hbmNob3JzID09PSAnb2JqZWN0JyAmJiBhbmNob3JzLmhhc093blByb3BlcnR5KCdoYXNBbmNob3JKU0xpbmsnKSkgewogICAgcmV0dXJuOwogIH0KCiAgY29uc3QgaCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3JBbGwoJ2gxLCBoMiwgaDMsIGg0LCBoNSwgaDYnKTsKCiAgLy8gRG8gbm90aGluZyBpZiBzZWN0aW9ucyBhcmUgYWxyZWFkeSBhbmNob3JlZAogIGlmIChBcnJheS5mcm9tKGgpLnNvbWUoeCA9PiB4LmNsYXNzTGlzdC5jb250YWlucygnaGFzQW5jaG9yJykpKSB7CiAgICByZXR1cm4gbnVsbDsKICB9CgogIC8vIFVzZSBzZWN0aW9uIGlkIHdoZW4gcGFuZG9jIHJ1bnMgd2l0aCAtLXNlY3Rpb24tZGl2cwogIGNvbnN0IHNlY3Rpb25faWQgPSBmdW5jdGlvbih4KSB7CiAgICByZXR1cm4gKCh4LmNsYXNzTGlzdC5jb250YWlucygnc2VjdGlvbicpIHx8ICh4LnRhZ05hbWUgPT09ICdTRUNUSU9OJykpCiAgICAgICAgICAgID8geC5pZCA6ICcnKTsKICB9OwoKICAvLyBBZGQgYW5jaG9ycwogIGguZm9yRWFjaChmdW5jdGlvbih4KSB7CiAgICBjb25zdCBpZCA9IHguaWQgfHwgc2VjdGlvbl9pZCh4LnBhcmVudEVsZW1lbnQpOwogICAgaWYgKGlkID09PSAnJykgewogICAgICByZXR1cm4gbnVsbDsKICAgIH0KICAgIGxldCBhbmNob3IgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdhJyk7CiAgICBhbmNob3IuaHJlZiA9ICcjJyArIGlkOwogICAgYW5jaG9yLmNsYXNzTGlzdCA9IFsnYW5jaG9yLXNlY3Rpb24nXTsKICAgIHguY2xhc3NMaXN0LmFkZCgnaGFzQW5jaG9yJyk7CiAgICB4LmFwcGVuZENoaWxkKGFuY2hvcik7CiAgfSk7Cn0pOwo="></script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -83,19 +31,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -115,7 +62,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -172,187 +119,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<style type="text/css">body {
-background-color: #fff;
-margin: 1em auto;
-max-width: 700px;
-overflow: visible;
-padding-left: 2em;
-padding-right: 2em;
-font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-font-size: 14px;
-line-height: 1.35;
-}
-#TOC {
-clear: both;
-margin: 0 0 10px 10px;
-padding: 4px;
-width: 400px;
-border: 1px solid #CCCCCC;
-border-radius: 5px;
-background-color: #f6f6f6;
-font-size: 13px;
-line-height: 1.3;
-}
-#TOC .toctitle {
-font-weight: bold;
-font-size: 15px;
-margin-left: 5px;
-}
-#TOC ul {
-padding-left: 40px;
-margin-left: -1.5em;
-margin-top: 5px;
-margin-bottom: 5px;
-}
-#TOC ul ul {
-margin-left: -2em;
-}
-#TOC li {
-line-height: 16px;
-}
-table {
-margin: 1em auto;
-border-width: 1px;
-border-color: #DDDDDD;
-border-style: outset;
-border-collapse: collapse;
-}
-table th {
-border-width: 2px;
-padding: 5px;
-border-style: inset;
-}
-table td {
-border-width: 1px;
-border-style: inset;
-line-height: 18px;
-padding: 5px 5px;
-}
-table, table th, table td {
-border-left-style: none;
-border-right-style: none;
-}
-table thead, table tr.even {
-background-color: #f7f7f7;
-}
-p {
-margin: 0.5em 0;
-}
-blockquote {
-background-color: #f6f6f6;
-padding: 0.25em 0.75em;
-}
-hr {
-border-style: solid;
-border: none;
-border-top: 1px solid #777;
-margin: 28px 0;
-}
-dl {
-margin-left: 0;
-}
-dl dd {
-margin-bottom: 13px;
-margin-left: 13px;
-}
-dl dt {
-font-weight: bold;
-}
-ul {
-margin-top: 0;
-}
-ul li {
-list-style: circle outside;
-}
-ul ul {
-margin-bottom: 0;
-}
-pre, code {
-background-color: #f7f7f7;
-border-radius: 3px;
-color: #333;
-white-space: pre-wrap; 
-}
-pre {
-border-radius: 3px;
-margin: 5px 0px 10px 0px;
-padding: 10px;
-}
-pre:not([class]) {
-background-color: #f7f7f7;
-}
-code {
-font-family: Consolas, Monaco, 'Courier New', monospace;
-font-size: 85%;
-}
-p > code, li > code {
-padding: 2px 0px;
-}
-div.figure {
-text-align: center;
-}
-img {
-background-color: #FFFFFF;
-padding: 2px;
-border: 1px solid #DDDDDD;
-border-radius: 3px;
-border: 1px solid #CCCCCC;
-margin: 0 5px;
-}
-h1 {
-margin-top: 0;
-font-size: 35px;
-line-height: 40px;
-}
-h2 {
-border-bottom: 4px solid #f7f7f7;
-padding-top: 10px;
-padding-bottom: 2px;
-font-size: 145%;
-}
-h3 {
-border-bottom: 2px solid #f7f7f7;
-padding-top: 10px;
-font-size: 120%;
-}
-h4 {
-border-bottom: 1px solid #f7f7f7;
-margin-left: 8px;
-font-size: 105%;
-}
-h5, h6 {
-border-bottom: 1px solid #ccc;
-font-size: 105%;
-}
-a {
-color: #0033dd;
-text-decoration: none;
-}
-a:hover {
-color: #6666ff; }
-a:visited {
-color: #800080; }
-a:visited:hover {
-color: #BB00BB; }
-a[href^="http:"] {
-text-decoration: underline; }
-a[href^="https:"] {
-text-decoration: underline; }
-
-code > span.kw { color: #555; font-weight: bold; } 
-code > span.dt { color: #902000; } 
-code > span.dv { color: #40a070; } 
-code > span.bn { color: #d14; } 
-code > span.fl { color: #d14; } 
-code > span.ch { color: #d14; } 
-code > span.st { color: #d14; } 
-code > span.co { color: #888888; font-style: italic; } 
-code > span.ot { color: #007020; } 
-code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; } 
-code > span.er { color: #a61717; background-color: #e3d2d2; } 
-</style>
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
 
 
 
@@ -365,17 +132,19 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Information matrices for fitted <code>lme()</code> and <code>gls()</code> models</h1>
-<h4 class="date">2020-11-12</h4>
+<h4 class="date">2021-02-01</h4>
 
 
 <div id="TOC">
 <ul>
 <li><a href="#notation"><span class="toc-section-number">1</span> Notation</a></li>
 <li><a href="#hierarchical-linear-models"><span class="toc-section-number">2</span> Hierarchical linear models</a></li>
-<li><a href="#estimation"><span class="toc-section-number">3</span> Estimation</a><ul>
+<li><a href="#estimation"><span class="toc-section-number">3</span> Estimation</a>
+<ul>
 <li><a href="#fixed-effect-estimation"><span class="toc-section-number">3.1</span> Fixed effect estimation</a></li>
 <li><a href="#variance-parameter-estimation"><span class="toc-section-number">3.2</span> Variance parameter estimation</a></li>
-<li><a href="#sampling-variance-of-variance-parameters"><span class="toc-section-number">3.3</span> Sampling variance of variance parameters</a><ul>
+<li><a href="#sampling-variance-of-variance-parameters"><span class="toc-section-number">3.3</span> Sampling variance of variance parameters</a>
+<ul>
 <li><a href="#restricted-maximum-likelihood"><span class="toc-section-number">3.3.1</span> Restricted maximum likelihood</a></li>
 <li><a href="#full-maximum-likelihood"><span class="toc-section-number">3.3.2</span> Full maximum likelihood</a></li>
 </ul></li>
@@ -394,9 +163,9 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 \def\Info{{\mathcal{I}}}
 \def\Jnfo{{\mathcal{J}}}
 \]</span></p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">#library(lmeInfo)</span></span></code></pre></div>
-<div id="notation" class="section level1">
-<h1><span class="header-section-number">1</span> Notation</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#library(lmeInfo)</span></span></code></pre></div>
+<div id="notation" class="section level1" number="1">
+<h1 number="1"><span class="header-section-number">1</span> Notation</h1>
 <p>In what follows, we will use the following symbols for matrix operations. Let <span class="math inline">\(\bigoplus\)</span> denote the Kronecker sum, which creates a block-diagonal matrix from a sequence of sub-matrices. Thus, for matrices <span class="math inline">\(\bmat{A}_1,...,\bmat{A}_m\)</span>, <span class="math display">\[
 \bigoplus_{i=1}^m \bmat{A}_i = \left[\begin{array}{cccc}
 \bmat{A}_1 &amp; \bmat{0} &amp; \cdots &amp; \bmat{0} \\ 
@@ -415,8 +184,8 @@ a_{m1} \bmat{B} &amp; a_{m2} \bmat{B} &amp; \cdots &amp; a_{mn} \bmat{B} \\
 \bmat{I}_m \bigotimes \bmat{B} = \bigoplus_{i=1}^m \bmat{B}.
 \]</span></p>
 </div>
-<div id="hierarchical-linear-models" class="section level1">
-<h1><span class="header-section-number">2</span> Hierarchical linear models</h1>
+<div id="hierarchical-linear-models" class="section level1" number="2">
+<h1 number="2"><span class="header-section-number">2</span> Hierarchical linear models</h1>
 <p>We shall be concerned with hierarchical linear models fitted by full maximum likelihood (FML) or restricted maximum likelihood (RML) using the <code>lme()</code> function from R package <code>nlme</code>. Consider a set of observations from each of <span class="math inline">\(m\)</span> groups, where group <span class="math inline">\(i\)</span> has <span class="math inline">\(n_i\)</span> observations for <span class="math inline">\(i = 1,...,m\)</span> and <span class="math inline">\(N = \sum_{i=1}^m n_i\)</span>. Let <span class="math inline">\(y_{hi}\)</span> denote the outcome measure and <span class="math inline">\(\bmat{x}_{hi}\)</span> denote a <span class="math inline">\(p \times 1\)</span> row vector of fixed predictor variables, both for observation <span class="math inline">\(h\)</span> from group <span class="math inline">\(i\)</span>. Let <span class="math inline">\(\bmat{y}_i = (y_{1i} \cdots y_{n_i i})&#39;\)</span> be the <span class="math inline">\(n_i \times 1\)</span> vector of outcomes and <span class="math inline">\(\bmat{X}_i = \left(\bmat{x}_{1i}&#39; \cdots \bmat{x}_{n_ii}&#39;\right)&#39;\)</span> be the <span class="math inline">\(n_i \times p\)</span> design matrix of predictors for group <span class="math inline">\(i\)</span>. Hierarchical <code>lme</code> models have the form <span class="math display">\[
 \bmat{y}_i = \bmat{X}_i \bs\beta + \bmat{Z}_i \bs\eta_i + \bs\epsilon_i
 \]</span> where <span class="math inline">\(\bmat{Z}_i\)</span> is a <span class="math inline">\(n_i \times q_i\)</span> design matrix describing random effects for group <span class="math inline">\(i\)</span>, <span class="math inline">\(\bs\beta\)</span> is a <span class="math inline">\(p \times 1\)</span> vector of regression coefficients, <span class="math inline">\(\bs\eta_i\)</span> is a <span class="math inline">\(q_i \times 1\)</span> vector of random effects, and <span class="math inline">\(\bs\epsilon_i\)</span> is a <span class="math inline">\(n_i \times 1\)</span> vector of observation-specific errors. We assume that <span class="math display">\[
@@ -438,11 +207,11 @@ a_{m1} \bmat{B} &amp; a_{m2} \bmat{B} &amp; \cdots &amp; a_{mn} \bmat{B} \\
 \bmat{V} = \bmat{Z} \bmat{T} \bmat{Z}&#39; + \sigma^2 \bmat{S} \bmat{R} \bmat{S}
 \]</span></p>
 </div>
-<div id="estimation" class="section level1">
-<h1><span class="header-section-number">3</span> Estimation</h1>
+<div id="estimation" class="section level1" number="3">
+<h1 number="3"><span class="header-section-number">3</span> Estimation</h1>
 <p>Fitting hierarchical models by FML or RML entails estimating both the fixed effect coefficients <span class="math inline">\(\bs\beta\)</span> and the parameters of the random effects structure, variance structure, and correlation structure. Let <span class="math inline">\(\bs\theta = \left(\bs\tau&#39;, \bs\psi&#39;, \bs\phi&#39;,\sigma^2 \right)&#39;\)</span> denote the vector collecting of all of the latter parameters, with a total of <span class="math inline">\(r\)</span> unique entries.</p>
-<div id="fixed-effect-estimation" class="section level2">
-<h2><span class="header-section-number">3.1</span> Fixed effect estimation</h2>
+<div id="fixed-effect-estimation" class="section level2" number="3.1">
+<h2 number="3.1"><span class="header-section-number">3.1</span> Fixed effect estimation</h2>
 <p>For explanatory purposes, it is helpful to begin by considering estimation of the fixed effects, supposing that <span class="math inline">\(\bs\theta\)</span> is known (and thus, that that the marginal variance-covariances <span class="math inline">\(\bmat{V}_i\)</span> are known). In this case, the only unknowns are the fixed effects <span class="math inline">\(\bs\beta\)</span>, which can be estimated efficiently using weighted least squares (WLS). The WLS estimator of <span class="math inline">\(\bs\beta\)</span> is given by <span class="math display">\[
 \hat{\bs\beta} = \bmat{M} \bmat{X}&#39; \bmat{V}^{-1} \bmat{y}, \qquad \text{where} \qquad \bmat{M} = \left(\bmat{X}&#39; \bmat{V}^{-1} \bmat{X}\right)^{-1}.
 \]</span> Assuming that the variance parameters are known, the sampling distribution of <span class="math inline">\(\hat{\bs\beta}\)</span> is multivariate normal with mean <span class="math inline">\(\bs\beta\)</span> and covariance matrix <span class="math display">\[
@@ -451,8 +220,8 @@ a_{m1} \bmat{B} &amp; a_{m2} \bmat{B} &amp; \cdots &amp; a_{mn} \bmat{B} \\
 \hat{\bmat{M}} = \bmat{M}(\hat{\bs\theta}) = \left(\bmat{X}&#39; \hat{\bmat{V}}^{-1} \bmat{X}\right)^{-1}.
 \]</span> It is known that <span class="math inline">\(\hat{\bmat{M}}\)</span> tends to underestimate the true covariance of <span class="math inline">\(\hat{\bs\beta}\)</span> when <span class="math inline">\(m\)</span> is small. Kenward and Roger <span class="citation">(1997, 2009)</span> proposed more elaborate covariance estimators and hypothesis testing procedures for use in small samples.</p>
 </div>
-<div id="variance-parameter-estimation" class="section level2">
-<h2><span class="header-section-number">3.2</span> Variance parameter estimation</h2>
+<div id="variance-parameter-estimation" class="section level2" number="3.2">
+<h2 number="3.2"><span class="header-section-number">3.2</span> Variance parameter estimation</h2>
 <p>The feasible WLS estimator is based on estimates of the variance parameters. In <code>lme</code>, FML and RML estimators for these parameters are obtained by maximizing the log likelihood or restricted log likelihood of the model via iterative numerical methods. Following <span class="citation">Lindstrom &amp; Bates (1988)</span>, -2 times the full log likelihood is given by <span class="math display">\[
 -2 l_F\left(\bs\beta, \bs\theta\right) = \log \left|\bmat{V}(\bs\theta)\right| + \bmat{r}&#39; \bmat{V}^{-1}(\bs\theta)\bmat{r},
 \]</span> where <span class="math inline">\(\bmat{r} = \bmat{y} - \bmat{X} \bs\beta\)</span> and <span class="math inline">\(\left| \cdot \right|\)</span> denotes the norm of a matrix. Similarly, -2 times the restricted log likelihood (which is a function of <span class="math inline">\(\bs\theta\)</span> alone) is given by <span class="math display">\[
@@ -461,13 +230,13 @@ a_{m1} \bmat{B} &amp; a_{m2} \bmat{B} &amp; \cdots &amp; a_{mn} \bmat{B} \\
 \bmat{Q}(\bs\theta) = \bmat{V}^{-1}(\bs\theta) - \bmat{V}^{-1}(\bs\theta) \bmat{X} \left(\bmat{X}&#39; \bmat{V}^{-1}(\bs\theta) \bmat{X}\right)^{-1} \bmat{X}&#39; \bmat{V}^{-1}(\bs\theta).
 \]</span> Let <span class="math inline">\(\hat{\bs\theta}_F\)</span> and <span class="math inline">\(\hat{\bs\theta}_R\)</span> denote the FML and RML estimators of the variance parameters, respectively. Let <span class="math inline">\(\hat{\bs\theta}\)</span> be a generic estimator of the variance parameters (i.e., either the FML or RML estimator).</p>
 </div>
-<div id="sampling-variance-of-variance-parameters" class="section level2">
-<h2><span class="header-section-number">3.3</span> Sampling variance of variance parameters</h2>
+<div id="sampling-variance-of-variance-parameters" class="section level2" number="3.3">
+<h2 number="3.3"><span class="header-section-number">3.3</span> Sampling variance of variance parameters</h2>
 <p>The analyst might need to obtain estimates of the uncertainty in <span class="math inline">\(\hat{\bs\theta}\)</span>, either for purposes of inference or as a component of small-sample approximations for other statistics. For purposes of inference, a recommended approach to obtain a confidence interval for a single component of <span class="math inline">\(\bs\theta\)</span> is to use profile likelihood methods. Another approach is to use approximations based on the information matrix of the full or restricted likelihood. The inverse of the observed, expected, or average Fisher information provides an approximate estimate of <span class="math inline">\(\Var(\hat{\bs\theta})\)</span>, valid as the number of groups grows large. Thus, define <span class="math display">\[
 \bmat{C}(\hat{\bs\theta}) = \Info^{-1},
 \]</span> where <span class="math inline">\(\Info\)</span> is the observed, expected, or average information matrix. We now define these matrices in detail.</p>
-<div id="restricted-maximum-likelihood" class="section level3">
-<h3><span class="header-section-number">3.3.1</span> Restricted maximum likelihood</h3>
+<div id="restricted-maximum-likelihood" class="section level3" number="3.3.1">
+<h3 number="3.3.1"><span class="header-section-number">3.3.1</span> Restricted maximum likelihood</h3>
 <p>The observed information is the negative Hessian matrix (-1 times the matrix of second derivatives) of the log likelihood, evaluated using the full or restricted maximum likelihood estimator of <span class="math inline">\(\theta\)</span>. For RML estimators, the observed information matrix has entries <span class="math display">\[
 \begin{aligned}
 \Info^{RO}_{st} &amp;= \left. -\frac{\partial^2 l_R(\bs\theta)}{\partial \theta_s \partial \theta_t} \right|_{\bs\theta = \hat{\bs\theta}} \\
@@ -487,8 +256,8 @@ a_{m1} \bmat{B} &amp; a_{m2} \bmat{B} &amp; \cdots &amp; a_{mn} \bmat{B} \\
 \bmat{C}(\hat{\bs\theta}) = \left(\nabla_\xi h \right) \left[\Jnfo^{-1}\right] \left(\nabla_\xi h \right)&#39;,
 \]</span> where <span class="math inline">\(\nabla_\xi h\)</span> is evaluated at <span class="math inline">\(\hat{\bs\xi}\)</span>.</p>
 </div>
-<div id="full-maximum-likelihood" class="section level3">
-<h3><span class="header-section-number">3.3.2</span> Full maximum likelihood</h3>
+<div id="full-maximum-likelihood" class="section level3" number="3.3.2">
+<h3 number="3.3.2"><span class="header-section-number">3.3.2</span> Full maximum likelihood</h3>
 <p>For FML estimators, the entries of the observed information matrix involve <span class="math inline">\(\bs\beta\)</span> in addition to <span class="math inline">\(\bs\theta\)</span>. The entries for <span class="math inline">\(\bs\theta\)</span> are <span class="math display">\[
 \begin{aligned}
 \Info^{FO}_{st} &amp;= \left. -\frac{\partial^2 l_F(\bs\beta, \bs\theta)}{\partial \theta_s \partial \theta_t} \right|_{\bs\theta = \hat{\bs\theta}} \\ 
@@ -506,22 +275,22 @@ a_{m1} \bmat{B} &amp; a_{m2} \bmat{B} &amp; \cdots &amp; a_{mn} \bmat{B} \\
 </div>
 </div>
 <div id="references" class="section level1 unnumbered">
-<h1>References</h1>
-<div id="refs" class="references">
-<div id="ref-Gilmour2009ASReml">
-<p>Gilmour, A. R., Gogel, B. J., Cullis, B. R., &amp; Thompson, R. (2009). <em>ASReml User Guide</em>.</p>
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
+<div id="ref-Gilmour2009ASReml" class="csl-entry">
+Gilmour, A. R., Gogel, B. J., Cullis, B. R., &amp; Thompson, R. (2009). <em><span>ASReml User Guide</span></em>.
 </div>
-<div id="ref-Gilmour1995average">
-<p>Gilmour, A. R., Thompson, R., &amp; Cullis, B. R. (1995). Average information REML: An efficient algorithm for variance parameter estimation in linear mixed models. <em>Biometrics</em>, <em>51</em>(4), 1440–1450. <a href="https://doi.org/10.2307/2533274">https://doi.org/10.2307/2533274</a></p>
+<div id="ref-Gilmour1995average" class="csl-entry">
+Gilmour, A. R., Thompson, R., &amp; Cullis, B. R. (1995). Average information <span>REML</span>: <span>An</span> efficient algorithm for variance parameter estimation in linear mixed models. <em>Biometrics</em>, <em>51</em>(4), 1440–1450. <a href="https://doi.org/10.2307/2533274">https://doi.org/10.2307/2533274</a>
 </div>
-<div id="ref-Kenward1997small">
-<p>Kenward, M. G., &amp; Roger, J. H. (1997). Small sample inference for fixed effects from restricted maximum likelihood. <em>Biometrics</em>, <em>53</em>(3), 983–997.</p>
+<div id="ref-Kenward1997small" class="csl-entry">
+Kenward, M. G., &amp; Roger, J. H. (1997). Small sample inference for fixed effects from restricted maximum likelihood. <em>Biometrics</em>, <em>53</em>(3), 983–997.
 </div>
-<div id="ref-Kenward2009improved">
-<p>Kenward, M. G., &amp; Roger, J. H. (2009). An improved approximation to the precision of fixed effects from restricted maximum likelihood. <em>Computational Statistics &amp; Data Analysis</em>, <em>53</em>(7), 2583–2595. <a href="https://doi.org/10.1016/j.csda.2008.12.013">https://doi.org/10.1016/j.csda.2008.12.013</a></p>
+<div id="ref-Kenward2009improved" class="csl-entry">
+Kenward, M. G., &amp; Roger, J. H. (2009). An improved approximation to the precision of fixed effects from restricted maximum likelihood. <em>Computational Statistics &amp; Data Analysis</em>, <em>53</em>(7), 2583–2595. <a href="https://doi.org/10.1016/j.csda.2008.12.013">https://doi.org/10.1016/j.csda.2008.12.013</a>
 </div>
-<div id="ref-Lindstrom1988">
-<p>Lindstrom, M. J., &amp; Bates, D. M. (1988). Newton-Raphson and EM algorithms for linear mixed-effects models for repeated-measures data. <em>Journal of the American Statistical Association</em>, <em>83</em>(404), 1014–1022.</p>
+<div id="ref-Lindstrom1988" class="csl-entry">
+Lindstrom, M. J., &amp; Bates, D. M. (1988). Newton-<span>Raphson</span> and <span>EM</span> algorithms for linear mixed-effects models for repeated-measures data. <em>Journal of the American Statistical Association</em>, <em>83</em>(404), 1014–1022.
 </div>
 </div>
 </div>
