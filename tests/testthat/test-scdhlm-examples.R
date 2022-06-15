@@ -1,5 +1,7 @@
 context("Examples from scdhlm")
 
+skip_if_not_installed("scdhlm")
+
 library(scdhlm)
 
 data(Lambert)
@@ -80,9 +82,6 @@ test_that("lmeInfo::g_mlm returns the same result as scdhlm::g_REML.", {
 
   skip_if_not_installed("scdhlm", minimum_version = "0.4.2")
 
-  g_Lambert_RML <- g_mlm(Lambert_RML, c(0,1),c(1,0,1), returnModel = FALSE)
-  expect_error(summary(g_Lambert_RML))
-
   check_against_scdhlm(Lambert_RML,
                        p_lmeInfo = c(0,1), r_lmeInfo = c(1,0,1), r_scdhlm = c(1,0,1))
 
@@ -144,6 +143,8 @@ test_that("lmeInfo::CI_g returns the correct CIs for Schutte examples.", {
 })
 
 test_that("lmeInfo::summary() and lmeInfo::print() return output.", {
+
+  skip_if_not_installed("scdhlm", minimum_version = "0.4.2")
 
   g_RML4 <- g_mlm(Schutte_RML4, p_const = c(0,0,1,7), r_const = c(1,0,0,0,1))
   expect_output(summary(g_RML4))

@@ -55,7 +55,11 @@ expect_correct_block_dims <- function(x, m, ni, is_list = TRUE) {
 
 test_deriv_dims <- function(mod) UseMethod("test_deriv_dims")
 
+#' @export
+
 test_deriv_dims.default <- function(mod) stop("Shouldn't get here!")
+
+#' @export
 
 test_deriv_dims.gls <- function(mod) {
 
@@ -88,29 +92,37 @@ test_deriv_dims.gls <- function(mod) {
   testthat::expect_identical(dim(info_A), r_dim)
 }
 
+#' @export
+
 test_deriv_dims.lme <- function(mod) {
 
   vc_est <- extract_varcomp(mod)
   m <- mod$dims$ngrps[names(vc_est$Tau)]
   ni <- lapply(mod$groups[names(vc_est$Tau)], table)
-  G <- length(vc_est$Tau)
+  # G <- length(vc_est$Tau)
 
   if (!is.null(mod$modelStruct$reStruct)) {
-    d_Tau <- dV_dreStruct(mod)
+    d_Tau <- dV_dreStruct(mod)[names(vc_est$Tau)]
     testthat::expect_identical(lengths(d_Tau), lengths(vc_est$Tau))
     mapply(expect_correct_block_dims, x = d_Tau, m = m, ni = ni)
   }
 
+  if (!is.null(mod$modelStruct$corStruct)) {
+    cor_groups <- get_cor_grouping(mod)
+    m <- c(nlevels(cor_groups), m)
+    ni <- c(cor = list(table(cor_groups)), ni)
+  }
+
   d_cor <- dV_dcorStruct(mod)
   testthat::expect_identical(length(d_cor), length(vc_est$cor_params))
-  expect_correct_block_dims(d_cor, m = m[[G]], ni = ni[[G]])
+  expect_correct_block_dims(d_cor, m = m[[1]], ni = ni[[1]])
 
   d_var <- dV_dvarStruct(mod)
   testthat::expect_identical(length(d_var), length(vc_est$var_params))
-  expect_correct_block_dims(d_var, m = m[[G]], ni = ni[[G]])
+  expect_correct_block_dims(d_var, m = m[[1]], ni = ni[[1]])
 
   d_sigma <- build_var_cor_mats(mod, sigma_scale = FALSE)
-  expect_correct_block_dims(d_sigma, m = m[[G]], ni = ni[[G]], is_list = FALSE)
+  expect_correct_block_dims(d_sigma, m = m[[1]], ni = ni[[1]], is_list = FALSE)
 
   info_E <- Fisher_info(mod, type = "expected")
   info_A <- Fisher_info(mod, type = "average")
@@ -201,7 +213,7 @@ test_after_deleting <- function(mod, seed = NULL) {
 
 }
 
-test_after_shuffling <- function(mod, by_var = NULL,
+test_after_shuffling <- function(mod, keep_rows = NULL, by_var = NULL,
                                  tol_param = 10^-3, tol_info = 10^-3,
                                  test = "info", seed = NULL) {
 
@@ -209,10 +221,12 @@ test_after_shuffling <- function(mod, by_var = NULL,
 
   dat <- nlme::getData(mod)
 
-  if (is.null(by_var)) {
-    shuffle <- sample(nrow(dat))
-  } else {
+  if (!is.null(keep_rows)) {
+    shuffle <- c(1:keep_rows, sample((keep_rows + 1):nrow(dat)))
+  } else if (!is.null(by_var)) {
     shuffle <- unsplit(tapply(1:nrow(dat), by_var, sample), by_var)
+  } else {
+    shuffle <- sample(nrow(dat))
   }
   unshuffle <- order(shuffle)
   dat_shuffle <- dat[shuffle,]
@@ -328,7 +342,7 @@ check_REML2 <- function(mod, print = FALSE) {
 
 check_against_scdhlm <- function(mod, p_lmeInfo, r_lmeInfo, p_scdhlm = p_lmeInfo, r_scdhlm, infotype = "expected") {
 
-  g_lmeInfo <- g_mlm(mod, p_lmeInfo, r_lmeInfo)
+  g_lmeInfo <- g_mlm(mod, p_const = p_lmeInfo, r_const = r_lmeInfo)
 
   g_scdhlm <- suppressWarnings(scdhlm::g_REML(mod, p_scdhlm, r_scdhlm))
 
@@ -346,3 +360,9 @@ check_against_scdhlm <- function(mod, p_lmeInfo, r_lmeInfo, p_scdhlm = p_lmeInfo
 
 }
 
+check_info_dim <- function(mod, dim, type = "expected") {
+  Imat <- Fisher_info(mod, type = type)
+  Vmat <- varcomp_vcov(mod, type = type)
+  testthat::expect_identical(dim(Imat), rep(dim, 2))
+  testthat::expect_identical(dim(Vmat), rep(dim, 2))
+}

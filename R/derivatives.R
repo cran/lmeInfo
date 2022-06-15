@@ -43,7 +43,7 @@ dV_dTau_index <- function(tau_index, Z_blocks, block) {
 
 dV_dTau_unstruct <- function(block, pdMat_class, Z_design) {
   Tau_q <- dim(Z_design)[2]
-  Z_blocks <- by(Z_design, block, as.matrix)
+  Z_blocks <- by(Z_design, block, as.matrix, simplify = FALSE)
 
   if ("pdDiag" %in% pdMat_class) {
     tau_index <- cbind(seq(1,Tau_q), seq(1,Tau_q))
@@ -60,15 +60,21 @@ dV_dTau_unstruct <- function(block, pdMat_class, Z_design) {
 dV_dreStruct <- function(mod) {
   blocks <- mod$groups
   blocks_names <- names(blocks)
+  reStruct_names <- names(mod$modelStruct$reStruct)
+  if (!all(blocks_names %in% reStruct_names)) names(mod$modelStruct$reStruct) <- rev(blocks_names)
   b <- lapply(blocks_names, function(x) class(mod$modelStruct$reStruct[[x]])) # pdClass
-  data <- mod$data
-  Z_design <- model.matrix(mod$modelStruct$reStruct, data = data[complete.cases(data), ])
+  data <- nlme::getData(mod)
+  Z_design <- model.matrix(mod$modelStruct$reStruct, data = data)
+  if (inherits(mod$na.action, "exclude")) {
+    Z_design <- Z_design[!(rownames(Z_design) %in% names(mod$na.action)),,drop=FALSE]
+  }
+
+  Z_names <- get_RE_names(mod$modelStruct$reStruct)
 
   if (length(blocks) == 1L) {
     Z_list <- list(Z_design)
   } else {
-    Z_list <- sapply(names(blocks),
-                     function(x) Z_design[,grep(x, colnames(Z_design)), drop = FALSE],
+    Z_list <- sapply(Z_names[names(blocks)], function(x) Z_design[,x, drop = FALSE],
                      simplify = FALSE, USE.NAMES = TRUE)
 
   }
@@ -237,19 +243,15 @@ dV_dvarStruct <- function(mod) {
   # No derivatives if there's no variance structure or only varFixed structure
   if (is.null(mod$modelStruct$varStruct) | inherits(mod$modelStruct$varStruct,"varFixed")) return(NULL)
 
-  # all_groups <- rev(mod$groups)
-  # sort_order <- order(do.call(order, all_groups))
-  sort_order <- get_sort_order(mod)
-
   dsd_dvar <- dsd_dvarStruct(mod$modelStruct$varStruct)
-
-  dsd_dvar <- lapply(dsd_dvar, function(x) x[sort_order]) # reorder based on input data
-
   R_list <- build_corr_mats(mod)
 
-  wts <- nlme::varWeights(mod$modelStruct$varStruct)[sort_order]
-
   if (is.null(R_list)) {
+    sort_order <- get_sort_order(mod)
+
+    dsd_dvar <- lapply(dsd_dvar, function(x) x[sort_order]) # reorder based on input data
+
+    wts <- nlme::varWeights(mod$modelStruct$varStruct)[sort_order]
 
     dV_dvar <- lapply(dsd_dvar, function(d) 2 * d * mod$sigma^2 / wts)
 
@@ -262,9 +264,10 @@ dV_dvarStruct <- function(mod) {
     })
 
   } else {
-    grps <- attr(R_list, "groups")
-    sigmasq_S_list <- split(mod$sigma^2 / wts, grps)
-    dsd_list <- lapply(dsd_dvar, split, f = grps)
+    cor_grps <- attr(mod$modelStruct$corStruct, "groups")
+    wts <- nlme::varWeights(mod$modelStruct$varStruct)
+    sigmasq_S_list <- split(mod$sigma^2 / wts, cor_grps)
+    dsd_list <- lapply(dsd_dvar, split, f = cor_grps)
     dV_list <- lapply(dsd_list, sdRds, sd_list = sigmasq_S_list, R_list = R_list)
 
   }
