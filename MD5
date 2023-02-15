@@ -1,6 +1,6 @@
-568701fbc0d134bf42551cb4c5154083 *DESCRIPTION
+66a56b78ba56c711adfc829ffc81ead7 *DESCRIPTION
 56ece4251f967100420c0dedf4484f02 *NAMESPACE
-e3e21b811ccd041c886bb6c5a532a4ec *NEWS.md
+c168b37a6b0bc4661d892e8fafcc4b06 *NEWS.md
 c07c830831bc0bbfde74a2af01dc19c8 *R/build-variance-matrices.R
 3c6feef1320ba0ae8b680a74e153c36a *R/confidence-interval-functions.R
 054434349e9800bce8094478d6eb9a18 *R/data-documentation.R
@@ -9,12 +9,12 @@ a1da659e787b1933ee79681441e46c24 *R/function-checking.R
 1f2e5c7c9796d9fc31d754c42bf24770 *R/g_mlm.R
 ab963710d5e9e8c5a628cc8210132581 *R/information-matrices.R
 f78fae8f688650cb1f157463bf86279a *R/matrix-functions.R
-afbe4209b3bb961ba3e41cbfe79ea507 *build/partial.rdb
-bb1dcb31acfa04659dc501b6bff97a7e *build/vignette.rds
+cb4924f3573383fca290a0a8e2ca5294 *build/partial.rdb
+6641eeb8387f6126f6e196fafde3fff5 *build/vignette.rds
 fd89c522d2de5783491bef2863c8631c *data/Bryant2016.RData
 8ad62fbbf1728942712553d9e6875d73 *inst/doc/Information-matrices-for-fitted-LME-models.R
 4524cf811bbf7a2e39c14aae4e30f6a9 *inst/doc/Information-matrices-for-fitted-LME-models.Rmd
-39c8448c899798228c418d27f0d32019 *inst/doc/Information-matrices-for-fitted-LME-models.html
+eb5afe6b54dc0adf438d867b59f36ce2 *inst/doc/Information-matrices-for-fitted-LME-models.html
 71ee5bf546ae98b8853e5f003e41c6b0 *man/Bryant2016.Rd
 855fcf9036e8e608c3b205aa39b3c042 *man/CI_g.Rd
 bfdf137d14ed549bc09579b84a264ded *man/Fisher_info.Rd
@@ -23,7 +23,7 @@ bfdf137d14ed549bc09579b84a264ded *man/Fisher_info.Rd
 0644887a644cc484ce7f909ef96f9f7a *man/varcomp_vcov.Rd
 db3a989bc15b9b55cac1a09dbf24ab0e *tests/testthat.R
 65a6331628af97b654bc133fca998a81 *tests/testthat/test-against-merDeriv.R
-452a3d70c12ed0228a05383d3a048452 *tests/testthat/test-dfs-sensitivity.R
+ad8b1fedf51255cf8ff7d316a7c53cc4 *tests/testthat/test-dfs-sensitivity.R
 a8e747c46f5c9f6cabf2be20955ea106 *tests/testthat/test-equivalent-models.R
 b17ffdded09e8f68472b930d936484dc *tests/testthat/test-equivalent-pdClasses.R
 a95cc156bccdbe2b663b88335e0db237 *tests/testthat/test-fixed-sigma-models.R
@@ -33,9 +33,9 @@ efea8873f8a71d79190512108cd7999d *tests/testthat/test-meta-analysis-model.R
 8334dfbe5aa47fba188b799ad12f2a5b *tests/testthat/test-multi-model-g_mlm.R
 e551294889c7f772dc5ef26ed1f61202 *tests/testthat/test-multivariate-models.R
 86ddf9c938e9da408ba073602894e454 *tests/testthat/test-scdhlm-examples.R
-23a7f41e3219283e68bcb03008789c91 *tests/testthat/test-separate-random-effects.R
+6fb00d1444b9c74f14a715dab72f7853 *tests/testthat/test-separate-random-effects.R
 23bb1e070f24e4eef0fc2fba0cdced9a *tests/testthat/test-seperate-variances.R
-4b0df988edc342ee65ff4fdcd99e2cfb *tests/testthat/test-three-level-models.R
+8ea9d49b09c2df6c54f0b5697c7ae2b0 *tests/testthat/test-three-level-models.R
 67c02feb8d7f2bee4e6adb7389c25c31 *tests/testthat/test-two-level-models.R
 08643d95203e045d71f97511c021810c *tests/testthat/test-variance-structures.R
 e00029acdb29eb8411e72303e633b7fa *tests/testthat/test-weird-variable-names.R
