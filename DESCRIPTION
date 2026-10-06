@@ -1,7 +1,7 @@
 Package: lmeInfo
 Type: Package
 Title: Information Matrices for 'lmeStruct' and 'glsStruct' Objects
-Version: 0.3.2
+Version: 0.3.3
 Authors@R: 
     c(person(given = "James",
              family = "Pustejovsky",
@@ -33,12 +33,13 @@ Suggests: covr, testthat (>= 2.1.0), knitr, rmarkdown, scdhlm, mlmRev,
         carData, lme4, Matrix, merDeriv
 Imports: nlme, stats
 VignetteBuilder: knitr
-RoxygenNote: 7.2.3
 Language: en-US
+Config/roxygen2/version: 8.1.0
 NeedsCompilation: no
-Packaged: 2023-04-16 12:49:00 UTC; C-ama
-Author: James Pustejovsky [aut] (<https://orcid.org/0000-0003-0591-9465>),
+Packaged: 2026-10-05 20:56:57 UTC; mc62889
+Author: James Pustejovsky [aut] (ORCID:
+    <https://orcid.org/0000-0003-0591-9465>),
   Man Chen [aut, cre]
 Maintainer: Man Chen <manchen9005@gmail.com>
 Repository: CRAN
-Date/Publication: 2023-04-17 08:30:05 UTC
+Date/Publication: 2026-10-06 07:40:15 UTC
