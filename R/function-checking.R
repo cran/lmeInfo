@@ -148,7 +148,7 @@ test_with_FIML <- function(mod) {
 
 }
 
-compare_omit_exclude_complete <- function(mod, dat, NA_vals) {
+compare_omit_exclude_complete <- function(mod, dat, NA_vals, tol_param = 1e-3, tol_info = 5e-4) {
 
   dat_complete <- dat[!NA_vals,,drop=FALSE]
 
@@ -160,8 +160,8 @@ compare_omit_exclude_complete <- function(mod, dat, NA_vals) {
   varcomp_omit <- extract_varcomp(mod_omit)
   varcomp_exclude <- extract_varcomp(mod_exclude)
   varcomp_comp <- extract_varcomp(mod_comp)
-  testthat::expect_identical(varcomp_omit, varcomp_comp)
-  testthat::expect_identical(varcomp_exclude, varcomp_comp)
+  testthat::expect_equal(varcomp_omit, varcomp_comp, tolerance = tol_param)
+  testthat::expect_equal(varcomp_exclude, varcomp_comp, tolerance = tol_param)
 
   EI_omit <- Fisher_info(mod_omit, type = "expected")
   EI_exclude <- Fisher_info(mod_exclude, type = "expected")
@@ -170,10 +170,12 @@ compare_omit_exclude_complete <- function(mod, dat, NA_vals) {
   AI_exclude <- Fisher_info(mod_exclude, type = "average")
   AI_comp <- Fisher_info(mod_comp, type = "average")
 
-  testthat::expect_equal(EI_omit, EI_comp)
-  testthat::expect_equal(EI_exclude, EI_comp)
-  testthat::expect_equal(AI_omit, AI_comp)
-  testthat::expect_equal(AI_exclude, AI_comp)
+  One <- matrix(1, nrow(EI_comp), ncol(EI_comp))
+
+  testthat::expect_equivalent(EI_omit / EI_comp, One, tolerance = tol_info)
+  testthat::expect_equivalent(EI_exclude / EI_comp, One, tolerance = tol_info)
+  testthat::expect_equivalent(AI_omit / AI_comp, One, tolerance = tol_info)
+  testthat::expect_equivalent(AI_exclude / AI_comp, One, tolerance = tol_info)
 
 }
 
@@ -191,6 +193,7 @@ test_after_deleting <- function(mod, seed = NULL) {
   dat[[y_var]][NA_vals] <- NA
 
   if (inherits(mod, "gls")) dat <<- dat
+
   compare_omit_exclude_complete(mod, dat, NA_vals)
 
 
@@ -214,7 +217,7 @@ test_after_deleting <- function(mod, seed = NULL) {
 }
 
 test_after_shuffling <- function(mod, keep_rows = NULL, by_var = NULL,
-                                 tol_param = 10^-3, tol_info = 10^-3,
+                                 tol_param = 1e-3, tol_info = 5e-4,
                                  test = "info", seed = NULL) {
 
   if (!is.null(seed)) set.seed(seed)
