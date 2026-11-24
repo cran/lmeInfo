@@ -1,6 +1,6 @@
-4a6e2c77a564918234af0f078db39642 *DESCRIPTION
+b4adb4318becd8f6780d49d906460130 *DESCRIPTION
 d4096966ac4e28a5804a84f5ecfc27ee *NAMESPACE
-14d07a24de90912bcfc00c5e5226b8b9 *NEWS.md
+b33eb7ca013a7074f04c36ee7b80f72c *NEWS.md
 43833782d1838e49ba7bd56527be2b45 *R/build-variance-matrices.R
 3c6feef1320ba0ae8b680a74e153c36a *R/confidence-interval-functions.R
 054434349e9800bce8094478d6eb9a18 *R/data-documentation.R
@@ -14,7 +14,7 @@ b6e9f963ed142e3f0062ed0a09d9071f *build/vignette.rds
 fd89c522d2de5783491bef2863c8631c *data/Bryant2016.RData
 f1770884c7072a13526e29de1cf52c84 *inst/doc/Information-matrices-for-fitted-LME-models.R
 4524cf811bbf7a2e39c14aae4e30f6a9 *inst/doc/Information-matrices-for-fitted-LME-models.Rmd
-af04562317bc58101d93fa96b0ce98e0 *inst/doc/Information-matrices-for-fitted-LME-models.html
+70d2f9d48a4fec109cd3787e04cc12e8 *inst/doc/Information-matrices-for-fitted-LME-models.html
 71ee5bf546ae98b8853e5f003e41c6b0 *man/Bryant2016.Rd
 855fcf9036e8e608c3b205aa39b3c042 *man/CI_g.Rd
 bfdf137d14ed549bc09579b84a264ded *man/Fisher_info.Rd
@@ -33,7 +33,7 @@ efea8873f8a71d79190512108cd7999d *tests/testthat/test-meta-analysis-model.R
 b76a8a79153c737c8eb8b3ec9bc773c3 *tests/testthat/test-multi-model-g_mlm.R
 e9d9b9dd236975c6db462b6f0e35d83f *tests/testthat/test-multivariate-models.R
 86ddf9c938e9da408ba073602894e454 *tests/testthat/test-scdhlm-examples.R
-99d251d8800c6bb7024b153ebb8b0bb6 *tests/testthat/test-separate-random-effects.R
+4118817416cc4525b78134eec24f1b8b *tests/testthat/test-separate-random-effects.R
 23bb1e070f24e4eef0fc2fba0cdced9a *tests/testthat/test-seperate-variances.R
 10c0499d50dfd6ce1d2b5962b9b1de92 *tests/testthat/test-three-level-models.R
 67c02feb8d7f2bee4e6adb7389c25c31 *tests/testthat/test-two-level-models.R

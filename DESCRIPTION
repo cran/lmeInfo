@@ -1,7 +1,7 @@
 Package: lmeInfo
 Type: Package
 Title: Information Matrices for 'lmeStruct' and 'glsStruct' Objects
-Version: 0.3.4
+Version: 0.3.5
 Authors@R: 
     c(person(given = "James",
              family = "Pustejovsky",
@@ -36,10 +36,10 @@ VignetteBuilder: knitr
 Language: en-US
 Config/roxygen2/version: 8.1.0
 NeedsCompilation: no
-Packaged: 2026-11-17 13:24:44 UTC; mc62889
+Packaged: 2026-11-23 21:39:02 UTC; mc62889
 Author: James Pustejovsky [aut] (ORCID:
     <https://orcid.org/0000-0003-0591-9465>),
   Man Chen [aut, cre]
 Maintainer: Man Chen <manchen9005@gmail.com>
 Repository: CRAN
-Date/Publication: 2026-11-18 07:40:02 UTC
+Date/Publication: 2026-11-24 09:10:02 UTC
